@@ -4,8 +4,23 @@ $sql="select count(*) from `members` where `acc`='{$_POST['acc']}' && `pw`='{$_P
 
 $chk=$pdo->query($sql)->fetchColumn();
 
+
 if($chk){
+    
+    $sql_pr="select `pr` from `members` where `acc`='{$_POST['acc']}' && `pw`='{$_POST['pw']}'";
+    
+    $pr=$pdo->query($sql_pr)->fetchColumn();
+
     $_SESSION['login']=$_POST['acc'];
+    
+    $_SESSION['pr']=$pr;
+
+    if(isset($_SESSION['position'])){
+        header("location:".$_SESSION['position']);
+        unset($_SESSION['position']);
+        exit();
+    }
+
     header("location:../index.php");
 }else{
     header("location:../index.php?do=login&error=1");
